@@ -6,7 +6,7 @@ using UnityEngine;
 public class OrbSpawner : MonoBehaviour
 {
     public MRUKAnchor.SceneLabels spawnsLabels;
-    public float minDistanceToEdge = 0.5f;
+    public float minDistanceToEdge = 0.0f;
     public GameObject orbPrefab;
     
     
@@ -17,8 +17,9 @@ public class OrbSpawner : MonoBehaviour
         {
             SpawnOrb();
         }
+        GameManager.instance.gameIsReady = true;
     }
-    private IEnumerator SpawnOrbsCoroutine()
+    public IEnumerator SpawnOrbsCoroutine()
     {
         yield return new WaitForSeconds(3f);
         SpawnOrbs();
@@ -38,8 +39,8 @@ public class OrbSpawner : MonoBehaviour
         }
         
         Debug.Log("TRY SPAWN ORB");
-        Vector3 randomPosition = pos + norm; 
-        // randomPosition.y = 0f;
+        Vector3 randomPosition = pos + norm;
+        randomPosition.y = 1f;
         Instantiate(orbPrefab, randomPosition, Quaternion.identity);
         GameManager.instance.currentOrbs++;
     }
@@ -48,4 +49,5 @@ public class OrbSpawner : MonoBehaviour
     {
         StartCoroutine(SpawnOrbsCoroutine());
     }
+    
 }

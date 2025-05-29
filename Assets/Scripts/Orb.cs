@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Orb : MonoBehaviour
@@ -18,5 +19,13 @@ public class Orb : MonoBehaviour
     {
         GameManager.instance.currentOrbs--;
         Destroy(gameObject);
+    }
+
+    public void Update()
+    {
+        if (GameManager.instance.ghostsRemainingToKill <= 0 || GameManager.instance.gameIsOver)
+        {
+            OrbDeath();
+        }
     }
 }

@@ -13,6 +13,8 @@ public class GhostSpawner : MonoBehaviour
 
     public int maxGhosts = 20;
     public int currentGhosts = 0;
+    public bool isFirstGhost = true;
+    public float firstGhostSpawnTime = 10f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,12 +26,25 @@ public class GhostSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(spawnInterval);
+            if (isFirstGhost)
+            {
+                yield return new WaitForSeconds(firstGhostSpawnTime);   
+                isFirstGhost = false;
+            }
+            else
+            {
+                yield return new WaitForSeconds(spawnInterval);
+            }
+            
             if (currentGhosts < maxGhosts)
             {
                 SpawnGhost();
             }
-            
+
+            // if (GameManager.instance.gameIsOver)
+            // {
+            //     StopCoroutine(SpawnGhosts());
+            // }
         }
         // Instantiate(ghostPrefab, transform.position, Quaternion.identity);
     }
@@ -46,5 +61,16 @@ public class GhostSpawner : MonoBehaviour
             Instantiate(ghostPrefab, randomPosition, Quaternion.identity);
             currentGhosts++;
         }
+    }
+
+    public void Stop()
+    {
+        StopCoroutine(SpawnGhosts());
+        isFirstGhost = true;
+    }
+
+    public void StartAgain()
+    {
+        StartCoroutine(SpawnGhosts());
     }
 }
